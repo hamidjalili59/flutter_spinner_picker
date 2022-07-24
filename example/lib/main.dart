@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               FlutterSpinner(
                 color: Colors.grey,
-                height: 309,
+                height: 310,
                 width: 200,
                 itemHeight: 10,
                 itemWidth: 50,
@@ -62,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
                 spacing: 10,
-                is12HourMode: true,
                 style: const TextStyle(fontSize: 25, color: Colors.white),
               ),
               const SizedBox(height: 20),

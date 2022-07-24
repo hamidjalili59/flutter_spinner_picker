@@ -14,23 +14,29 @@ class FlutterSpinner extends StatefulWidget {
   final double itemWidth;
   final String title;
   final TextStyle? style;
+  final double? fontSize;
+  final Color? selectedFontColor;
+  final Color? unselectedFontColor;
   final double padding;
   final Color? color;
-  final bool is12HourMode;
+  // final bool is12HourMode;
   final TimePickerCallback? onTimeChange;
 
   const FlutterSpinner(
       {this.color,
       required this.selectedDate,
-      this.height,
+      required this.height,
+      required this.width,
       this.itemHeight = 20,
       this.itemWidth = 20,
       this.padding = 8,
       this.spacing,
+      this.unselectedFontColor = Colors.white,
+      this.selectedFontColor = Colors.white38,
+      this.fontSize = 16,
       this.style,
       this.title = "",
-      this.width,
-      this.is12HourMode = false,
+      // this.is12HourMode = false,
       this.onTimeChange,
       Key? key})
       : super(key: key);
@@ -46,16 +52,21 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
   DateTime getDateTime() {
     int hour = _indexLeft;
     int minute = _indexRight;
-    return DateTime(currentTime.year, currentTime.month, currentTime.day, hour, minute);
+    return DateTime(
+        currentTime.year, currentTime.month, currentTime.day, hour, minute);
   }
 
 //
   @override
   void initState() {
     super.initState();
-
+    setState(() {
+      _indexLeft = widget.selectedDate.hour;
+      _indexRight = widget.selectedDate.minute;
+    });
     if (widget.onTimeChange != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => widget.onTimeChange!(getDateTime()));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => widget.onTimeChange!(getDateTime()));
     }
   }
 
@@ -80,7 +91,8 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                   // itemCount: widget.is12HourMode ? 12 : 24,
                   itemCount: 24,
                   scrollDirection: Axis.vertical,
-                  controller: PageController(viewportFraction: 0.3),
+                  controller: PageController(
+                      viewportFraction: 0.3, initialPage: _indexLeft),
                   onPageChanged: (int index) => setState(() {
                     // if (widget.is12HourMode) {
                     // _indexLeft = index * 2;
@@ -95,14 +107,18 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                   }),
                   itemBuilder: (_, i) {
                     return Transform.scale(
-                      scale: i == _indexLeft ? 1.3 : 0.85,
+                      scale: i == _indexLeft ? 1.3 : 0.7,
                       child: SizedBox(
                           width: widget.itemWidth,
                           height: widget.itemHeight,
                           child: Center(
                             child: Text(
                               i.toString().padLeft(2, "0"),
-                              style: widget.style,
+                              style: TextStyle(
+                                  color: i == _indexLeft
+                                      ? widget.selectedFontColor
+                                      : widget.unselectedFontColor,
+                                  fontSize: widget.fontSize),
                             ),
                           )),
                     );
@@ -121,7 +137,8 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                 child: PageView.builder(
                   itemCount: 60,
                   scrollDirection: Axis.vertical,
-                  controller: PageController(viewportFraction: 0.3),
+                  controller: PageController(
+                      viewportFraction: 0.3, initialPage: _indexRight),
                   onPageChanged: (int index) => setState(() {
                     _indexRight = index;
                     setState(() {
@@ -132,14 +149,18 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                   }),
                   itemBuilder: (_, iR) {
                     return Transform.scale(
-                      scale: iR == _indexRight ? 1.3 : 0.85,
+                      scale: iR == _indexRight ? 1.3 : 0.7,
                       child: SizedBox(
                           width: widget.itemWidth,
                           height: widget.itemHeight,
                           child: Center(
                             child: Text(
                               iR.toString().padLeft(2, "0"),
-                              style: widget.style,
+                              style: TextStyle(
+                                  color: iR == _indexLeft
+                                      ? widget.selectedFontColor
+                                      : widget.unselectedFontColor,
+                                  fontSize: widget.fontSize),
                             ),
                           )),
                     );
