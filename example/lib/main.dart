@@ -65,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
                 spacing: 10,
-                style: const TextStyle(fontSize: 25, color: Colors.white),
               ),
               const SizedBox(height: 20),
               Text(selectedTime.toString())

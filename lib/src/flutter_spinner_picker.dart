@@ -12,13 +12,11 @@ class FlutterSpinner extends StatefulWidget {
   final double? height;
   final double itemHeight;
   final double itemWidth;
-  final TextStyle? style;
   final double? fontSize;
   final Color? selectedFontColor;
   final Color? unselectedFontColor;
   final double padding;
   final Color? color;
-  // final bool is12HourMode;
   final TimePickerCallback? onTimeChange;
 
   const FlutterSpinner(
@@ -33,8 +31,6 @@ class FlutterSpinner extends StatefulWidget {
       this.unselectedFontColor = Colors.white,
       this.selectedFontColor = Colors.white38,
       this.fontSize = 16,
-      this.style,
-      // this.is12HourMode = false,
       this.onTimeChange,
       Key? key})
       : super(key: key);
@@ -45,7 +41,6 @@ class FlutterSpinner extends StatefulWidget {
 
 class _FlutterSpinnerState extends State<FlutterSpinner> {
   DateTime currentTime = DateTime.now();
-
   //getter
   DateTime getDateTime() {
     int hour = _indexLeft;
@@ -86,34 +81,33 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
               child: SizedBox(
                 height: widget.itemHeight, // card height
                 child: PageView.builder(
-                  // itemCount: widget.is12HourMode ? 12 : 24,
-                  itemCount: 24,
                   scrollDirection: Axis.vertical,
                   controller: PageController(
-                      viewportFraction: 0.3, initialPage: _indexLeft),
+                      viewportFraction: 0.3,
+                      initialPage: _indexLeft,
+                      keepPage: true),
+                  pageSnapping: true,
                   onPageChanged: (int index) => setState(() {
-                    // if (widget.is12HourMode) {
-                    // _indexLeft = index * 2;
-                    // } else {
-                    _indexLeft = index;
-                    // }
-                    setState(() {
-                      if (widget.onTimeChange != null) {
-                        widget.onTimeChange!(getDateTime());
-                      }
-                    });
+                    int saeat;
+                    saeat = index ~/ 24;
+                    _indexLeft = index - saeat * 24;
+                    if (widget.onTimeChange != null) {
+                      widget.onTimeChange!(getDateTime());
+                    }
                   }),
                   itemBuilder: (_, i) {
+                    int saeat;
+                    saeat = i ~/ 24;
                     return Transform.scale(
-                      scale: i == _indexLeft ? 1.3 : 0.7,
+                      scale: i - saeat * 24 == _indexLeft ? 1.3 : 0.7,
                       child: SizedBox(
                           width: widget.itemWidth,
                           height: widget.itemHeight,
                           child: Center(
                             child: Text(
-                              i.toString().padLeft(2, "0"),
+                              (i - saeat * 24).toString().padLeft(2, "0"),
                               style: TextStyle(
-                                  color: i == _indexLeft
+                                  color: i - saeat * 24 == _indexLeft
                                       ? widget.selectedFontColor
                                       : widget.unselectedFontColor,
                                   fontSize: widget.fontSize),
@@ -133,12 +127,13 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
               child: SizedBox(
                 height: widget.itemHeight, // card height
                 child: PageView.builder(
-                  itemCount: 60,
                   scrollDirection: Axis.vertical,
                   controller: PageController(
                       viewportFraction: 0.3, initialPage: _indexRight),
                   onPageChanged: (int index) => setState(() {
-                    _indexRight = index;
+                    int daghighe;
+                    daghighe = index ~/ 60;
+                    _indexRight = index - daghighe * 60;
                     setState(() {
                       if (widget.onTimeChange != null) {
                         widget.onTimeChange!(getDateTime());
@@ -146,16 +141,18 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                     });
                   }),
                   itemBuilder: (_, iR) {
+                    int daghighe;
+                    daghighe = iR ~/ 60;
                     return Transform.scale(
-                      scale: iR == _indexRight ? 1.3 : 0.7,
+                      scale: iR - daghighe * 60 == _indexRight ? 1.3 : 0.7,
                       child: SizedBox(
                           width: widget.itemWidth,
                           height: widget.itemHeight,
                           child: Center(
                             child: Text(
-                              iR.toString().padLeft(2, "0"),
+                              (iR - daghighe * 60).toString().padLeft(2, "0"),
                               style: TextStyle(
-                                  color: iR == _indexRight
+                                  color: iR - daghighe * 60 == _indexRight
                                       ? widget.selectedFontColor
                                       : widget.unselectedFontColor,
                                   fontSize: widget.fontSize),
