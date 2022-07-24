@@ -12,7 +12,6 @@ class FlutterSpinner extends StatefulWidget {
   final double? height;
   final double itemHeight;
   final double itemWidth;
-  final String title;
   final TextStyle? style;
   final double? fontSize;
   final Color? selectedFontColor;
@@ -35,7 +34,6 @@ class FlutterSpinner extends StatefulWidget {
       this.selectedFontColor = Colors.white38,
       this.fontSize = 16,
       this.style,
-      this.title = "",
       // this.is12HourMode = false,
       this.onTimeChange,
       Key? key})
@@ -157,7 +155,7 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                             child: Text(
                               iR.toString().padLeft(2, "0"),
                               style: TextStyle(
-                                  color: iR == _indexLeft
+                                  color: iR == _indexRight
                                       ? widget.selectedFontColor
                                       : widget.unselectedFontColor,
                                   fontSize: widget.fontSize),

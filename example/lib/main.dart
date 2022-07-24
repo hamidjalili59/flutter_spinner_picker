@@ -50,6 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               FlutterSpinner(
                 color: Colors.grey,
+                fontSize: 26,
+                selectedFontColor: Colors.white,
+                unselectedFontColor: Colors.white.withOpacity(0.4),
                 height: 310,
                 width: 200,
                 itemHeight: 10,
