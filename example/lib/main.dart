@@ -51,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
               FlutterSpinner(
                 color: Colors.grey,
                 fontSize: 26,
+                is24Hour: false,
                 selectedFontColor: Colors.white,
                 unselectedFontColor: Colors.white.withOpacity(0.4),
                 height: 310,

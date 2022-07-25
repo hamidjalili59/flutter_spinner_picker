@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-int _indexLeft = 0;
-int _indexRight = 0;
-
 typedef TimePickerCallback = void Function(DateTime);
 
 class FlutterSpinner extends StatefulWidget {
@@ -10,9 +7,11 @@ class FlutterSpinner extends StatefulWidget {
   final double? spacing;
   final double? width;
   final double? height;
+  final bool? is24Hour;
   final double itemHeight;
   final double itemWidth;
   final double? fontSize;
+  final double? suffixSize;
   final Color? selectedFontColor;
   final Color? unselectedFontColor;
   final double padding;
@@ -24,6 +23,7 @@ class FlutterSpinner extends StatefulWidget {
       required this.selectedDate,
       required this.height,
       required this.width,
+      required this.is24Hour,
       this.itemHeight = 20,
       this.itemWidth = 20,
       this.padding = 8,
@@ -31,6 +31,7 @@ class FlutterSpinner extends StatefulWidget {
       this.unselectedFontColor = Colors.white,
       this.selectedFontColor = Colors.white38,
       this.fontSize = 16,
+      this.suffixSize = 26,
       this.onTimeChange,
       Key? key})
       : super(key: key);
@@ -40,6 +41,10 @@ class FlutterSpinner extends StatefulWidget {
 }
 
 class _FlutterSpinnerState extends State<FlutterSpinner> {
+  bool isAM = true;
+  int _indexLeft = 0;
+  int _indexRight = 0;
+
   DateTime currentTime = DateTime.now();
   //getter
   DateTime getDateTime() {
@@ -67,7 +72,7 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width,
+      width: widget.is24Hour! ? widget.width! : widget.width! * 1.2,
       height: widget.height,
       color: widget.color,
       child: Center(
@@ -76,7 +81,7 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: widget.width! / 2.5,
+              width: widget.width! / (widget.is24Hour == false ? 2.8 : 2.5),
               height: widget.height,
               child: SizedBox(
                 height: widget.itemHeight, // card height
@@ -89,25 +94,35 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                   pageSnapping: true,
                   onPageChanged: (int index) => setState(() {
                     int saeat;
-                    saeat = index ~/ 24;
-                    _indexLeft = index - saeat * 24;
+                    saeat = index ~/ (widget.is24Hour! ? 24 : 12);
+                    _indexLeft = index - saeat * (widget.is24Hour! ? 24 : 12);
                     if (widget.onTimeChange != null) {
                       widget.onTimeChange!(getDateTime());
                     }
                   }),
                   itemBuilder: (_, i) {
                     int saeat;
-                    saeat = i ~/ 24;
+                    saeat = i ~/ (widget.is24Hour! ? 24 : 12);
                     return Transform.scale(
-                      scale: i - saeat * 24 == _indexLeft ? 1.3 : 0.7,
+                      scale:
+                          i - saeat * (widget.is24Hour! ? 24 : 12) == _indexLeft
+                              ? 1.3
+                              : 0.7,
                       child: SizedBox(
                           width: widget.itemWidth,
                           height: widget.itemHeight,
                           child: Center(
                             child: Text(
-                              (i - saeat * 24).toString().padLeft(2, "0"),
+                              (i - saeat * (widget.is24Hour! ? 24 : 12))
+                                  .toString()
+                                  .padLeft(2, "0"),
                               style: TextStyle(
-                                  color: i - saeat * 24 == _indexLeft
+                                  color: i -
+                                              saeat *
+                                                  (widget.is24Hour!
+                                                      ? 24
+                                                      : 12) ==
+                                          _indexLeft
                                       ? widget.selectedFontColor
                                       : widget.unselectedFontColor,
                                   fontSize: widget.fontSize),
@@ -122,7 +137,7 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
               width: widget.spacing,
             ),
             SizedBox(
-              width: widget.width! / 2.5,
+              width: widget.width! / (widget.is24Hour! ? 2.5 : 2.8),
               height: widget.height,
               child: SizedBox(
                 height: widget.itemHeight, // card height
@@ -163,6 +178,50 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
                 ),
               ),
             ),
+            widget.is24Hour! ? const SizedBox() : const SizedBox(width: 16),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () => setState(() {
+                    isAM = true;
+                  }),
+                  child: Container(
+                    width: 50,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "AM",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: isAM
+                              ? widget.selectedFontColor
+                              : widget.unselectedFontColor,
+                          fontSize: widget.suffixSize),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 50),
+                InkWell(
+                  onTap: () => setState(() {
+                    isAM = false;
+                  }),
+                  child: Container(
+                    width: 50,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "PM",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: !isAM
+                              ? widget.selectedFontColor
+                              : widget.unselectedFontColor,
+                          fontSize: widget.suffixSize),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

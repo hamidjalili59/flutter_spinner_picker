@@ -26,21 +26,24 @@ adding lastest version in your pabspect and pub get
 import package and enjoy it
 
 ```dart
-FlutterSpinner(
+ FlutterSpinner(
                 color: Colors.grey,
-                height: 309,
+                fontSize: 26,
+                is24Hour: false,
+                selectedFontColor: Colors.white,
+                unselectedFontColor: Colors.white.withOpacity(0.4),
+                height: 310,
                 width: 200,
                 itemHeight: 10,
                 itemWidth: 50,
                 padding: 20,
+                selectedDate: DateTime.now(),
                 onTimeChange: (date) {
                   setState(() {
                     selectedTime = date;
                   });
                 },
                 spacing: 10,
-                is12HourMode: true,
-                style: const TextStyle(fontSize: 25, color: Colors.white),
               ),
 ```
 
