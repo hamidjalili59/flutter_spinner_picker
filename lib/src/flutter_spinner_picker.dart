@@ -179,49 +179,51 @@ class _FlutterSpinnerState extends State<FlutterSpinner> {
               ),
             ),
             widget.is24Hour! ? const SizedBox() : const SizedBox(width: 16),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () => setState(() {
-                    isAM = true;
-                  }),
-                  child: Container(
-                    width: 50,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "AM",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: isAM
-                              ? widget.selectedFontColor
-                              : widget.unselectedFontColor,
-                          fontSize: widget.suffixSize),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 50),
-                InkWell(
-                  onTap: () => setState(() {
-                    isAM = false;
-                  }),
-                  child: Container(
-                    width: 50,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "PM",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: !isAM
-                              ? widget.selectedFontColor
-                              : widget.unselectedFontColor,
-                          fontSize: widget.suffixSize),
-                    ),
-                  ),
-                ),
-              ],
-            )
+            widget.is24Hour!
+                ? const SizedBox()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () => setState(() {
+                          isAM = true;
+                        }),
+                        child: Container(
+                          width: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "AM",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: isAM
+                                    ? widget.selectedFontColor
+                                    : widget.unselectedFontColor,
+                                fontSize: widget.suffixSize),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                      InkWell(
+                        onTap: () => setState(() {
+                          isAM = false;
+                        }),
+                        child: Container(
+                          width: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "PM",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: !isAM
+                                    ? widget.selectedFontColor
+                                    : widget.unselectedFontColor,
+                                fontSize: widget.suffixSize),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
           ],
         ),
       ),
